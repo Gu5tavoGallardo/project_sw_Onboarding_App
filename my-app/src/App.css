@@ -1,0 +1,9 @@
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers vertically */
+  align-items: center;    /* Centers horizontally */
+  height: 100vh;          /* Makes the container take up the full viewport height */
+  text-align: center;     /* Centers the text inside each block */
+  margin: 0;              /* Removes default browser margin */
+}
