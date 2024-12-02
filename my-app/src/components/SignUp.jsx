@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, createUserWithEmailAndPassword } from '../config/firebase'; // Correct path
 
 function SignUp({ setCurrentPage }) {
   const [email, setEmail] = useState('');
@@ -8,7 +8,6 @@ function SignUp({ setCurrentPage }) {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const auth = getAuth();
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -23,7 +22,7 @@ function SignUp({ setCurrentPage }) {
       } else if (error.code === 'auth/weak-password') {
         setMessage('Password should be at least 6 characters.');
       } else {
-        setMessage('Error signing up, please try again.');
+        setMessage('Error signing up. Please try again.');
       }
     }
   };

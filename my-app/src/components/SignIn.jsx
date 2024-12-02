@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth, signInWithEmailAndPassword } from '../config/firebase'; // Correct path
 
 function SignIn({ setCurrentPage }) {
   const [email, setEmail] = useState('');
@@ -10,7 +10,6 @@ function SignIn({ setCurrentPage }) {
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const auth = getAuth();
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -23,25 +22,6 @@ function SignIn({ setCurrentPage }) {
     } catch (error) {
       setLoading(false);
       setMessage('Invalid email or password. Please try again.');
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      setMessage(`Welcome, ${user.displayName || user.email}!`);
-      setTimeout(() => {
-        setLoading(false);
-        setCurrentPage('dashboard');
-      }, 1000);
-    } catch (error) {
-      setLoading(false);
-      setMessage('Google sign-in failed. Please try again.');
     }
   };
 
@@ -64,12 +44,9 @@ function SignIn({ setCurrentPage }) {
           className="input"
         />
         <button type="submit" className="button" disabled={loading}>
-          {loading ? 'Signing In...' : 'Sign In with Email'}
+          {loading ? 'Signing In...' : 'Sign In'}
         </button>
       </form>
-      <button className="button google-button" onClick={handleGoogleSignIn} disabled={loading}>
-        {loading ? 'Signing In...' : 'Sign In with Google'}
-      </button>
       {message && <p className="message">{message}</p>}
       <button className="button" onClick={() => setCurrentPage('home')}>
         Back

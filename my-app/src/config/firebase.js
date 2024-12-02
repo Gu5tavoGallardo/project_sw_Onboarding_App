@@ -7,8 +7,6 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -23,14 +21,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // Firestore instance
-const storage = getStorage(app); // Storage instance
 const googleProvider = new GoogleAuthProvider();
 
 export {
   auth,
-  db,
-  storage,
   googleProvider,
   signInWithPopup,
   signInWithEmailAndPassword,

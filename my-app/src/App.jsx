@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import SignIn from "./components/SignIn.jsx"; // Adjust paths based on your file structure
-import SignUp from "./components/SignUp.jsx";
-import Dashboard from "./components/Dashboard.jsx";
-import StudentGuide from "./components/studentguide.jsx";
-import ProfessorGuide from "./components/ProfessorGuide.jsx";
-import StaffGuide from "./components/StaffGuide.jsx";
-import OITExtensions from "./components/OITExtetions.jsx"; // Adjust the file name if necessary
-import Home from "./components/Home.jsx";
+import React, { useState, lazy, Suspense } from "react";
+
+// Dynamic imports for better performance
+const SignIn = lazy(() => import("./components/SignIn.jsx"));
+const SignUp = lazy(() => import("./components/SignUp.jsx"));
+const Dashboard = lazy(() => import("./components/Dashboard.jsx"));
+const StudentGuide = lazy(() => import("./components/StudentGuide.jsx")); // Fixed case sensitivity
+const ProfessorGuide = lazy(() => import("./components/ProfessorGuide.jsx"));
+const StaffGuide = lazy(() => import("./components/StaffGuide.jsx"));
+const OITExtensions = lazy(() => import("./components/OITExtensions.jsx")); // Fixed typo
+const Home = lazy(() => import("./components/Home.jsx"));
 
 function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -32,7 +34,11 @@ function App() {
     }
   };
 
-  return <div>{renderPage()}</div>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>{renderPage()}</div>
+    </Suspense>
+  );
 }
 
 export default App;
