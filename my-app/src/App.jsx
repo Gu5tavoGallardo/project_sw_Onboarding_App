@@ -1,17 +1,30 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
+import { auth } from "./config/firebase"; // Firebase authentication
+import { onAuthStateChanged } from "firebase/auth";
 
 // Dynamic imports for better performance
 const SignIn = lazy(() => import("./components/SignIn.jsx"));
 const SignUp = lazy(() => import("./components/SignUp.jsx"));
 const Dashboard = lazy(() => import("./components/Dashboard.jsx"));
-const StudentGuide = lazy(() => import("./components/StudentGuide.jsx")); // Fixed case sensitivity
+const StudentGuide = lazy(() => import("./components/student hand book.jsx"));
 const ProfessorGuide = lazy(() => import("./components/ProfessorGuide.jsx"));
 const StaffGuide = lazy(() => import("./components/StaffGuide.jsx"));
-const OITExtensions = lazy(() => import("./components/OITExtensions.jsx")); // Fixed typo
+const OITExtensions = lazy(() => import("./components/OITExtensions.jsx"));
 const Home = lazy(() => import("./components/Home.jsx"));
 
 function App() {
   const [currentPage, setCurrentPage] = useState("home");
+  const [user, setUser] = useState(null);
+
+  // Listen to authentication state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Current user:", currentUser); // Debug log
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+  
 
   const renderPage = () => {
     switch (currentPage) {
@@ -20,15 +33,35 @@ function App() {
       case "signup":
         return <SignUp setCurrentPage={setCurrentPage} />;
       case "dashboard":
-        return <Dashboard setCurrentPage={setCurrentPage} />;
+        return user ? (
+          <Dashboard setCurrentPage={setCurrentPage} />
+        ) : (
+          <SignIn setCurrentPage={setCurrentPage} />
+        );
       case "studentGuide":
-        return <StudentGuide setCurrentPage={setCurrentPage} />;
+        return user ? (
+          <StudentGuide setCurrentPage={setCurrentPage} />
+        ) : (
+          <SignIn setCurrentPage={setCurrentPage} />
+        );
       case "professorGuide":
-        return <ProfessorGuide setCurrentPage={setCurrentPage} />;
+        return user ? (
+          <ProfessorGuide setCurrentPage={setCurrentPage} />
+        ) : (
+          <SignIn setCurrentPage={setCurrentPage} />
+        );
       case "staffGuide":
-        return <StaffGuide setCurrentPage={setCurrentPage} />;
+        return user ? (
+          <StaffGuide setCurrentPage={setCurrentPage} />
+        ) : (
+          <SignIn setCurrentPage={setCurrentPage} />
+        );
       case "extensions":
-        return <OITExtensions setCurrentPage={setCurrentPage} />;
+        return user ? (
+          <OITExtensions setCurrentPage={setCurrentPage} />
+        ) : (
+          <SignIn setCurrentPage={setCurrentPage} />
+        );
       default:
         return <Home setCurrentPage={setCurrentPage} />;
     }
