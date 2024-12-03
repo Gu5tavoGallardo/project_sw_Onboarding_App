@@ -6,7 +6,9 @@ function Card({ title, description, buttonLabel, onClick }) {
     <div className="card">
       <h3>{title}</h3>
       <p>{description}</p>
-      <button className="button" onClick={onClick}>{buttonLabel}</button>
+      <button className="button" onClick={onClick}>
+        {buttonLabel}
+      </button>
     </div>
   );
 }
